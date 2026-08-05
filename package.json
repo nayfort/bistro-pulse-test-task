@@ -1,0 +1,31 @@
+{
+  "name": "webdev-test-task",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev --workspace @webdev-test/server\" \"npm run dev --workspace @webdev-test/web\"",
+    "dev:web": "npm run dev --workspace @webdev-test/web",
+    "dev:server": "npm run dev --workspace @webdev-test/server",
+    "build": "npm run build --workspace @webdev-test/server && npm run build --workspace @webdev-test/web && npm run build --workspace @webdev-test/data-pipeline",
+    "test": "vitest run",
+    "pipeline": "npm run start --workspace @webdev-test/data-pipeline -- --import ../../data/input/Import.xlsx --price \"../../data/input/Тепла підлога прайс 2024.xlsx\" --out ../../data/output/import-updated.xlsx --xml ../../data/output/marketplace.xml --report ../../data/output/sync-report.json"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}
