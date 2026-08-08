@@ -41,6 +41,17 @@ npm run start --workspace @webdev-test/server
 
 Після build Express сервер віддає і API, і зібраний frontend. Для тестового домену достатньо направити reverse proxy/Nginx на порт `4300` і задати production env-змінні.
 
+## Vercel
+
+Проєкт містить `vercel.json` для деплою з кореня репозиторію:
+
+- Root Directory: repository root
+- Build Command: `npm run build --workspace @webdev-test/server && npm run build --workspace @webdev-test/web`
+- Output Directory: `apps/web/dist`
+- API routes: `/api/*`
+
+Production env-змінні додаються у Vercel Project Settings.
+
 ## Data Pipeline
 
 ```bash

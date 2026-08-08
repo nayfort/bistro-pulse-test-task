@@ -2,9 +2,11 @@ node_modules/
 dist/
 .env
 .idea/
+.vercel/
 .DS_Store
 coverage/
 data/output/*
 !data/output/.gitkeep
 *.log
 *.tsbuildinfo
+.vercel
