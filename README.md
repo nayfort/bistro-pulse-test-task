@@ -1,9 +1,5 @@
 # Web Developer Test Task
 
-Повне виконання тестового завдання для кандидата на посаду Web-розробника.
-
-## Що виконано
-
 - **Рівень 1: Frontend/CMS.** React + Vite landing за Figma-reference: Inter, адаптивний header, burger-menu з анімацією, hover-scale карток, hover-shadow для посилань без underline, production build.
 - **Рівень 2: Automation/Data Logic.** TypeScript pipeline для `Import.xlsx` і `Тепла підлога прайс 2024.xlsx`: оновлення `price`, розрахунок `old_price = price + 10%`, кольорове маркування `changed/identical/missing`, chunk-обробка, XML-feed для маркетплейсів.
 - **Рівень 3: API/System Integration.** Express API з кастомною валідацією імені та українського телефону, no-captcha anti-spam, SalesDrive `/handler/`, передача клієнта в Dilovod, Telegram health monitor.
@@ -18,10 +14,10 @@ packages/data-pipeline    Excel sync + XML generator
 cms/woocommerce-ua-delivery
 data/input                Source XLSX files from Google Drive
 data/output               Generated XLSX/XML/report
-docs/figma-thumbnail.webp Figma oEmbed thumbnail reference
+docs/figma-thumbnail.webp Design reference preview
 ```
 
-## Швидкий старт
+## Запуск
 
 ```bash
 cp .env.example .env
@@ -34,7 +30,7 @@ npm run dev
 - Web: `http://localhost:5173`
 - API: `http://localhost:4300/api/health`
 
-За замовчуванням `INTEGRATIONS_DRY_RUN=true`, тому форма працює без реальних ключів і не створює заявки у зовнішніх системах.
+Локальний режим інтеграцій керується змінною `INTEGRATIONS_DRY_RUN`.
 
 ## Production/Test Domain
 
@@ -43,7 +39,7 @@ npm run build
 npm run start --workspace @webdev-test/server
 ```
 
-Після build Express сервер віддає і API, і зібраний frontend. Для тестового домену достатньо направити reverse proxy/Nginx на порт `4300` і додати реальні env-змінні.
+Після build Express сервер віддає і API, і зібраний frontend. Для тестового домену достатньо направити reverse proxy/Nginx на порт `4300` і задати production env-змінні.
 
 ## Data Pipeline
 
@@ -96,8 +92,3 @@ npm run pipeline
 - SalesDrive API: https://salesdrive.ua/knowledge/api/
 - SalesDrive Swagger: https://api.salesdrive.me/api/docs/
 - Dilovod API: https://help.dilovod.ua/uk/article/api-dilovod-1gwt3m0/
-
-## Примітка щодо зовнішніх акаунтів
-
-Тестові акаунти SalesDrive/Dilovod і логіни до них мають створюватися власником здачі вручну. Код повністю готовий до підключення через `.env`; credentials не зашиті в репозиторій.
-

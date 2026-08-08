@@ -2,7 +2,7 @@
 
 ## Figma
 
-The public Figma link exposes oEmbed and thumbnail data without an API token. The implementation follows the visible thumbnail composition: minimalist white landing, compact header, centered title, food image block, cards, contact form, and mobile state.
+The frontend follows the supplied Figma screens: minimalist white landing, compact header, centered title, food image block, testimonial cards, contact form, footer, and mobile burger state.
 
 ## SalesDrive
 
@@ -28,4 +28,3 @@ The form avoids captcha by combining:
 - In-memory IP rate limit.
 
 For multi-instance production deployment, replace the in-memory rate-limit map with Redis or another shared store.
-

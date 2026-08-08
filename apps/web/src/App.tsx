@@ -1,36 +1,33 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Clock, Mail, MapPin, Menu, Phone, X } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { getSpamToken, submitLead } from "./api";
 import type { LeadPayload } from "./types";
 
-const menuItems = [
+const navLinks = [
+  ["Page", "#top"],
+  ["Page", "#testimonials"],
+  ["Page", "#contact"]
+];
+
+const testimonials = [
   {
-    title: "Green brunch bowl",
-    text: "Egg, herbs, roasted greens, tahini dressing.",
-    price: "320 UAH"
+    quote: "“A terrific piece of praise”",
+    avatar: "/images/avatar-1.jpg"
   },
   {
-    title: "Citrus salmon toast",
-    text: "House sourdough, cured salmon, fennel, lemon cream.",
-    price: "285 UAH"
+    quote: "“A fantastic bit of feedback”",
+    avatar: "/images/avatar-2.jpg"
   },
   {
-    title: "Market garden plate",
-    text: "Seasonal vegetables, grains, seeds, soft cheese.",
-    price: "260 UAH"
+    quote: "“A genuinely glowing review”",
+    avatar: "/images/avatar-3.jpg"
   }
 ];
 
-const stats = [
-  ["09:00", "daily opening"],
-  ["24", "seasonal seats"],
-  ["4.9", "guest rating"]
-];
-
-const navLinks = [
-  ["Menu", "#menu"],
-  ["Story", "#story"],
-  ["Contact", "#contact"]
+const footerColumns = [
+  ["Topic", "Page", "Page", "Page"],
+  ["Topic", "Page", "Page", "Page"],
+  ["Topic", "Page", "Page", "Page"]
 ];
 
 const namePattern = /^[A-Za-zА-Яа-яІіЇїЄєҐґ'’\-\s]{2,60}$/;
@@ -67,16 +64,17 @@ export default function App() {
       .catch(() => setSpamToken(""));
   }, []);
 
-  const year = useMemo(() => new Date().getFullYear(), []);
-
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("loading");
     setError("");
 
     const formData = new FormData(event.currentTarget);
+    const firstName = String(formData.get("firstName") || "").trim();
+    const lastName = String(formData.get("lastName") || "").trim();
+    const fullName = [firstName, lastName].filter(Boolean).join(" ");
     const payload: LeadPayload = {
-      name: String(formData.get("name") || "").trim(),
+      name: fullName,
       phone: String(formData.get("phone") || "").trim(),
       email: String(formData.get("email") || "").trim(),
       message: String(formData.get("message") || "").trim(),
@@ -112,17 +110,17 @@ export default function App() {
   return (
     <>
       <header className="site-header">
-        <a className="brand link-stub" href="#top" aria-label="Bistro Pulse home">
-          BP
+        <a className="brand link-stub" href="#top" aria-label="Site name home">
+          Site name
         </a>
         <nav className={`nav ${menuOpen ? "nav-open" : ""}`} aria-label="Primary navigation">
-          {navLinks.map(([label, href]) => (
-            <a className="link-stub" href={href} key={href} onClick={() => setMenuOpen(false)}>
+          {navLinks.map(([label, href], index) => (
+            <a className="link-stub" href={href} key={`${href}-${index}`} onClick={() => setMenuOpen(false)}>
               {label}
             </a>
           ))}
           <a className="nav-cta link-stub" href="#contact" onClick={() => setMenuOpen(false)}>
-            Book a table
+            Send form
           </a>
         </nav>
         <button
@@ -138,116 +136,103 @@ export default function App() {
 
       <main id="top">
         <section className="hero" aria-labelledby="hero-title">
-          <p className="eyebrow">Bistro Pulse</p>
           <h1 id="hero-title">Landing page title</h1>
-          <p className="hero-copy">
-            Seasonal brunch, quiet coffee, and a contact flow that sends every booking request to the CRM pipeline.
-          </p>
+          <p className="hero-copy">And a subheading describing your site, too</p>
           <a className="button button-primary" href="#contact">
-            Reserve now <ArrowRight size={18} aria-hidden="true" />
+            Send form
           </a>
           <img className="hero-image" src="/images/hero-food.jpg" alt="Seasonal dishes on a shared restaurant table" />
         </section>
 
-        <section className="menu-section" id="menu" aria-labelledby="menu-title">
+        <section className="testimonials-section" id="testimonials" aria-labelledby="testimonials-title">
           <div className="section-heading">
-            <p className="eyebrow">Menu</p>
-            <h2 id="menu-title">Heading</h2>
+            <h2 id="testimonials-title">Heading</h2>
+            <p>Subheading to introduce testimonials</p>
           </div>
-          <div className="cards">
-            {menuItems.map((item) => (
-              <article className="menu-card" key={item.title}>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
+          <div className="testimonial-grid">
+            {testimonials.map((item) => (
+              <article className="testimonial-card" key={item.quote}>
+                <h3>{item.quote}</h3>
+                <div className="person">
+                  <img src={item.avatar} alt="" aria-hidden="true" />
+                  <div>
+                    <strong>Name</strong>
+                    <span>Description</span>
+                  </div>
                 </div>
-                <strong>{item.price}</strong>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="story-section" id="story" aria-labelledby="story-title">
-          <div className="portrait-wrap">
-            <img src="/images/chef.jpg" alt="Restaurant host portrait" />
-          </div>
-          <div className="story-copy">
-            <p className="eyebrow">Contact us</p>
-            <h2 id="story-title">Designed for quick table requests and clean handoff</h2>
-            <p>
-              The page keeps the visual language restrained and close to the Figma reference: white space, black type,
-              compact cards, a clear form, and mobile-first navigation.
-            </p>
-            <div className="feature-list">
-              <span><Check size={18} /> Fresh daily menu</span>
-              <span><Check size={18} /> CRM-ready booking form</span>
-              <span><Check size={18} /> No-captcha spam defense</span>
-            </div>
-          </div>
-        </section>
-
         <section className="contact-section" id="contact" aria-labelledby="contact-title">
-          <div className="contact-copy">
-            <p className="eyebrow">Contact us</p>
-            <h2 id="contact-title">Let us know when you are coming</h2>
-            <p>Leave your details and the team will confirm the table by phone.</p>
-            <div className="contact-meta">
-              <span><MapPin size={18} /> Kyiv, Yaroslavska 12</span>
-              <span><Phone size={18} /> +38 (050) 123-45-67</span>
-              <span><Mail size={18} /> hello@bistropulse.test</span>
-              <span><Clock size={18} /> 09:00 - 21:00</span>
-            </div>
+          <div className="contact-heading">
+            <h2 id="contact-title">Contact us</h2>
+            <p>Subheading for description or instructions</p>
           </div>
 
           <form className="contact-form" onSubmit={onSubmit} noValidate>
-            <label>
-              Name
-              <input name="name" autoComplete="name" placeholder="Олена" pattern={namePattern.source} required />
+            <div className="form-row">
+              <label>
+                First name
+                <input name="firstName" autoComplete="given-name" placeholder="Jane" pattern={namePattern.source} required />
+              </label>
+              <label>
+                Last name
+                <input name="lastName" autoComplete="family-name" placeholder="Smitherton" pattern={namePattern.source} required />
+              </label>
+            </div>
+            <label className="full-field">
+              Email address
+              <input name="email" autoComplete="email" type="email" placeholder="email@janesfakedomain.net" />
             </label>
-            <label>
-              Phone
+            <label className="full-field">
+              Number
               <input
                 name="phone"
                 autoComplete="tel"
                 inputMode="tel"
-                placeholder="+38 (050) 123-45-67"
+                placeholder="+380-XX-XX-XX-XXX"
                 value={phone}
                 onChange={(event) => setPhone(maskPhone(event.target.value))}
                 required
               />
             </label>
-            <label>
-              Email
-              <input name="email" autoComplete="email" type="email" placeholder="name@example.com" />
-            </label>
-            <label>
-              Message
-              <textarea name="message" rows={4} placeholder="Time, guests, preferences" />
+            <label className="full-field">
+              Your message
+              <textarea name="message" rows={4} placeholder="Enter your question or message" />
             </label>
             <input className="hp-field" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-            <button className="button button-dark" type="submit" disabled={status === "loading" || !spamToken}>
+            <button className="button button-dark full-field" type="submit" disabled={status === "loading" || !spamToken}>
               {status === "loading" ? "Sending..." : "Submit"}
             </button>
             {status === "success" && <p className="form-note success">Request received. We will call you shortly.</p>}
             {status === "error" && <p className="form-note error">{error}</p>}
           </form>
-        </section>
-
-        <section className="stats-row" aria-label="Bistro highlights">
-          {stats.map(([value, label]) => (
-            <div key={label}>
-              <strong>{value}</strong>
-              <span>{label}</span>
-            </div>
-          ))}
+          <img className="contact-image" src="/images/chef.jpg" alt="Contact portrait" />
         </section>
       </main>
 
       <footer className="footer">
-        <span>Bistro Pulse</span>
-        <span>{year}</span>
+        <div className="footer-brand">
+          <span>Site name</span>
+          <div className="social-links" aria-label="Social links">
+            <a href="#" aria-label="Social link" />
+            <a href="#" aria-label="Social link" />
+            <a href="#" aria-label="Social link" />
+            <a href="#" aria-label="Social link" />
+          </div>
+        </div>
+        <div className="footer-columns">
+          {footerColumns.map((column, index) => (
+            <div key={index}>
+              {column.map((item, itemIndex) =>
+                itemIndex === 0 ? <strong key={item}>{item}</strong> : <a href="#" key={`${item}-${itemIndex}`}>{item}</a>
+              )}
+            </div>
+          ))}
+        </div>
       </footer>
     </>
   );
 }
-
