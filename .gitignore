@@ -9,4 +9,4 @@ data/output/*
 !data/output/.gitkeep
 *.log
 *.tsbuildinfo
-.vercel
+.env.local
